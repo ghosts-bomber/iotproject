@@ -3,13 +3,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <pthread.h>
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include "serial.h"
+#define DEV "/dev/ttyUSB0"
 char ip[16] = "127.0.0.1";
 char port[8] = "8000";
 char send_title[32] = "send";
@@ -17,11 +17,6 @@ char recv_title[32] = "recv";
 
 void *start_sub(void *arg)
 {
-    /*
-    unsigned char cmd[64]="";
-    sprintf(cmd,"mosquitto_sub -h %s -p %d -v -t %s",ip,port,recv_title);
-    system(cmd);
-    */
     if (execlp("mosquitto_sub", "mosquitto_sub", "-h", ip, "-p", port,
                "-v", "-t", recv_title, NULL) < 0)
     {
@@ -35,7 +30,7 @@ int main()
     serial = serial_new();
 
     /* Open /dev/ttyUSB0 with baudrate 115200, and defaults of 8N1, no flow control */
-    if (serial_open(serial, "/dev/ttyUSB0", 115200) < 0)
+    if (serial_open(serial, DEV, 115200) < 0)
     {
         fprintf(stderr, "serial_open(): %s\n", serial_errmsg(serial));
         exit(1);
@@ -64,21 +59,37 @@ int main()
     {
         while (1)
         {
-
             int ret = 0;
-            uint8_t buf[128] = "";
-
-            if ((ret = serial_read(serial, buf, sizeof(buf), 1000)) < 0)
+            uint8_t buf[64] = "";
+            int i = 0;
+            while (1)
             {
-                fprintf(stderr, "serial_read(): %s\n", serial_errmsg(serial));
-                exit(1);
+                char tmp = '\0';
+                if ((ret = serial_read(serial, &tmp, sizeof(tmp), 50)) < 0)
+                {
+                    fprintf(stderr, "serial_read(): %s\n", serial_errmsg(serial));
+                    exit(1);
+                }
+                if (tmp == '\n')
+                {
+                   
+                    buf[i++]=tmp;
+                    buf[i] = '\0';
+                    break;
+                }else if(tmp == '\0')
+                {
+                    continue;
+                }
+                else
+                {
+                    //printf("%c\n",tmp);
+                    buf[i++] = tmp;
+                }
             }
-
             //mqtt发送
-            //strcpy(buf,"hello");
-            unsigned char cmd[64] = "";
+            unsigned char cmd[128] = "";
             sprintf(cmd, "mosquitto_pub -h %s -p %s -t %s -m \"%s\"", ip, port, send_title, buf);
-            //printf("%s\n",buf);
+            //printf("%s", buf);
             //printf("%s\n",cmd);
             system(cmd);
         }
@@ -117,13 +128,14 @@ int main()
         {
             close(1);
             dup(fd[1]);
+            //启动mqtt订阅
             if (execlp("mosquitto_sub", "mosquitto_sub", "-h", ip, "-p", port,
                        "-v", "-t", recv_title, NULL) < 0)
             {
                 exit(0);
             }
         }
-        else if (j == 1) //单纯的认为 就是父进程
+        else if (j == 1)
         {
             while (1)
             {
