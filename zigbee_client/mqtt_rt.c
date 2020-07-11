@@ -6,8 +6,8 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-
 #include "serial.h"
+
 #define DEV "/dev/ttyUSB0"
 char ip[16] = "127.0.0.1";
 char port[8] = "8000";

@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include "sqlite3.h"
+#include "analy_data.h"
 
 char ip[16] = "127.0.0.1";
 char port[8] = "8000";
@@ -22,6 +24,8 @@ void *start_sub(void *arg)
 }
 int main()
 {
+    //初始化数据库
+    db_init();
     // 创建两个子进程
     pid_t pid;
     int i = 0;
@@ -43,11 +47,12 @@ int main()
     if (i == 0)
     {
         while (1)
-        {  
+        {
             //从队列中读取控制指令
-            char buf[64]="hello";
+            char buf[64] = "get_data";
+            sleep(10);
             /*----------------------------------*/
-            sleep(1);
+
             //mqtt发送 控制指令
             unsigned char cmd[128] = "";
             sprintf(cmd, "mosquitto_pub -h %s -p %s -t %s -m \"%s\"", ip, port, send_title, buf);
@@ -102,10 +107,14 @@ int main()
             {
                 char buf[128] = "";
                 read(fd[0], buf, sizeof(buf));
-                printf("%s",buf);
                 //处理接收到的数据
-               /*----------------------------------*/
-
+                /*----------------------------------*/
+                int ret = 0;
+                while (!(buf[ret++] == ' '))
+                {
+                }
+               
+                analy_data(buf + ret, strlen(buf)-ret);
             }
         }
         else if (j == 2)
