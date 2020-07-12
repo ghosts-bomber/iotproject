@@ -34,7 +34,13 @@ int main()
         fprintf(stderr, "serial_open(): %s\n", serial_errmsg(serial));
         exit(1);
     }
-
+    //启动接收程序
+    sleep(2);
+    if(serial_write(serial, "get_data",strlen("get_data")) < 0)
+    {
+        fprintf(stderr, "serial_write(): %s\n", serial_errmsg(serial));
+        exit(1);
+    }
 
     // 创建两个进程
     pid_t pid;

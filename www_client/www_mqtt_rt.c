@@ -26,6 +26,8 @@ int main()
 {
     //初始化数据库
     db_init();
+    //初始化消息队列
+    ipc_init();
     // 创建两个子进程
     pid_t pid;
     int i = 0;
@@ -45,19 +47,20 @@ int main()
 
     //进程1  mqtt发
     if (i == 0)
-    {
+    {   
         while (1)
         {
-            //从队列中读取控制指令
-            char buf[64] = "get_data";
-            sleep(10);
-            /*----------------------------------*/
 
+            //从队列中读取控制指令
+            char buf[64] = "";
+            read_ipc(buf);
+            
             //mqtt发送 控制指令
             unsigned char cmd[128] = "";
             sprintf(cmd, "mosquitto_pub -h %s -p %s -t %s -m \"%s\"", ip, port, send_title, buf);
             //printf("%s\n",cmd);
             system(cmd);
+            
         }
     }
 
@@ -145,5 +148,6 @@ int main()
             }
         }
     }
+    db_close();
     return 0;
 }
