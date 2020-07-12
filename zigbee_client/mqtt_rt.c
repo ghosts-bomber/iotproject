@@ -35,13 +35,14 @@ int main()
         exit(1);
     }
     //启动接收程序
+    /*
     sleep(2);
     if(serial_write(serial, "get_data",strlen("get_data")) < 0)
     {
         fprintf(stderr, "serial_write(): %s\n", serial_errmsg(serial));
         exit(1);
     }
-
+*/
     // 创建两个进程
     pid_t pid;
     int i = 0;
@@ -77,11 +78,12 @@ int main()
                 }
                 if (tmp == '\n')
                 {
-                   
-                    buf[i++]=tmp;
+
+                    buf[i++] = tmp;
                     buf[i] = '\0';
                     break;
-                }else if(tmp == '\0')
+                }
+                else if (tmp == '\0')
                 {
                     continue;
                 }
@@ -146,21 +148,20 @@ int main()
             {
                 char cmd[128] = "";
                 read(fd[0], cmd, sizeof(cmd));
-              
+
                 //串口发
                 if (strlen(cmd) > 0)
                 {
-                    int ret=0;
-                   while(!(cmd[ret++]==' '))
-                   {
-                    
-                   }
-                    if (serial_write(serial, cmd+ret, sizeof(cmd)-ret) < 0)
+                    int ret = 0;
+                    while (!(cmd[ret++] == ' '))
+                    {
+                    }
+                    if (serial_write(serial, cmd + ret, sizeof(cmd) - ret) < 0)
                     {
                         fprintf(stderr, "serial_write(): %s\n", serial_errmsg(serial));
                         exit(1);
                     }
-                    printf("%d::%s",ret,cmd+ret);
+                    printf("%d::%s", ret, cmd + ret);
                 }
             }
         }
