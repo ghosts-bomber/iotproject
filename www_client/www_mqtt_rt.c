@@ -58,7 +58,7 @@ int main()
             //mqtt发送 控制指令
             unsigned char cmd[128] = "";
             sprintf(cmd, "mosquitto_pub -h %s -p %s -t %s -m \"%s\"", ip, port, send_title, buf);
-            //printf("%s\n",cmd);
+            printf("%s\n",cmd);
             system(cmd);
             
         }

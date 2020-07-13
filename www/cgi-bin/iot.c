@@ -20,20 +20,32 @@ int main()
 
     //初始化消息队列
     ipc_init();
-     if(strncmp(data,"get_da",5)==0)
-     {
-    MSG msg;
-    memset(&msg, 0, sizeof(MSG));
-
-    if ((msgrcv(msg_id, &msg, sizeof(MSG) - sizeof(long), 10, IPC_NOWAIT)) < 0)
+    if (strncmp(data, "get_da", 5) == 0)
     {
-        printf("NULL\n");
-        return -1;
-    }
-   
-    printf("%d,%d\n",msg.temp,msg.humi);
+        MSG msg;
+        memset(&msg, 0, sizeof(MSG));
 
-     }
+        if ((msgrcv(msg_id, &msg, sizeof(MSG) - sizeof(long), 10, IPC_NOWAIT)) < 0)
+        {
+            printf("NULL\n");
+            return -1;
+        }
+
+        printf("%d,%d\n", msg.temp, msg.humi);
+    }
+    else if (strncmp(data, "set_data", 8) == 0)
+    {
+
+        GETCMD cmd;
+        cmd.mtype = 20;
+        strcpy(cmd.cmd, data);
+        if (msgsnd(msg_id, &cmd, sizeof(GETCMD) - sizeof(long), 0) < 0)
+        {
+            printf("send msg error \n");
+            return -1;
+        }
+        printf("successful\n");
+    }
     return 0;
 }
 
@@ -46,7 +58,4 @@ void ipc_init()
         printf("create msg error \n");
         return;
     }
-}
-void cgi_get_data(MSG *msg)
-{
 }

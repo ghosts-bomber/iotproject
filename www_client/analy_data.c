@@ -43,18 +43,19 @@ void analy_data(char *buf, int len)
         return;
     }
     else
+    {
         printf("add ipc succeeful\n");
+    }
 }
 void read_ipc(char *buf)
 {
     printf("recv ipc\n");
     GETCMD cmd;
-    memset(&cmd,0,sizeof(cmd));
-    int len = msgrcv(msg_id, &cmd, sizeof(cmd)-sizeof(long), 20, 0);
-    printf("get ipc:%s\n",cmd.cmd);
-    strcpy(buf,cmd.cmd);
+    memset(&cmd, 0, sizeof(cmd));
+    int len = msgrcv(msg_id, &cmd, sizeof(cmd) - sizeof(long), 20, 0);
+    printf("get ipc:%s\n", cmd.cmd);
+    strcpy(buf, cmd.cmd);
 }
-
 
 int get_db_data(void *para, int n_column, char **column_value, char **column_name)
 {

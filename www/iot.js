@@ -1,5 +1,5 @@
 var my_timer;
-var i=0;
+var i = 0;
 function timer_fun(arg) {
     if (arg == "1")//开启定时器
     {
@@ -39,22 +39,21 @@ function update_data() {
     //创建一个xmlHttpRequest对象
     var xmlHttp = null;
     xmlHttp = getXMLHttpRequest();
-    var data="get_data";
-   
+    var data = "get_data";
+
     xmlHttp.onreadystatechange = function () {
         //alert(xmlHttp.readyState+"   "+xmlHttp.status)
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             //获取服务器的结果
             var ret = xmlHttp.responseText;
             //将ret赋值给label
-            if(ret!="NULL\n")
-            {
+            if (ret != "NULL\n") {
                 var arr = ret.split(",");
                 document.getElementById("num").innerHTML = i++;
                 document.getElementById("temp").innerHTML = arr[0];
                 document.getElementById("humi").innerHTML = arr[1];
             }
-           
+
         }
     }
 
@@ -63,4 +62,69 @@ function update_data() {
 
     //POST send 由于url没有数据 所以只能用send将data发送出去
     xmlHttp.send(data);//将data发送给服务器
+}
+function set_sys() {
+    var temp_min = document.getElementById("temp_min").value;
+    var temp_max = document.getElementById("temp_max").value;
+    var humi_min = document.getElementById("humi_min").value;
+    var humi_max = document.getElementById("humi_max").value;
+    //获取下拉列表框被选中的索引号
+    var index = document.getElementById("temp_sw").selectedIndex;
+
+    //根据索引号 从选项数据中options[]中得到选中的内容
+    var temp_sw = document.getElementById("temp_sw").options[index].value;
+    index = document.getElementById("humi_sw").selectedIndex;
+    var humi_sw = document.getElementById("humi_sw").options[index].value;
+
+    if (!isNaN(temp_max) && !isNaN(temp_min) && !isNaN(humi_max) && !isNaN(humi_min)) {
+
+        //POST数据是密文传输
+        var url = "/cgi-bin/iot.cgi";
+        //创建一个xmlHttpRequest对象
+        var xmlHttp = null;
+        xmlHttp = getXMLHttpRequest();
+        var data = "set_data";
+        data += ',' + temp_min + ',' + temp_max + ',' + humi_max + ',' + humi_min;
+        if (temp_sw == "开启") {
+            data += ",manual";
+        }
+        else if (temp_sw == "关闭") {
+            data += ",auto";
+        }
+        if (humi_sw == "开启") {
+            data += ",manual";
+        }
+        else if (humi_sw == "关闭") {
+            data += ",auto";
+        }
+        xmlHttp.onreadystatechange = function () {
+            //alert(xmlHttp.readyState+"   "+xmlHttp.status)
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                //获取服务器的结果
+                var ret = xmlHttp.responseText;
+                alert(ret);
+            }
+        }
+        //open POST
+        xmlHttp.open("POST", url, true);
+        //POST send 由于url没有数据 所以只能用send将data发送出去
+        xmlHttp.send(data);//将data发送给服务器
+
+    }
+    else {
+        alert("请输入数字");
+        document.getElementById("temp_min").value = "";
+        document.getElementById("temp_max").value = "";
+        document.getElementById("humi_min").value = "";
+        document.getElementById("humi_max").value = "";
+        return;
+    }
+}
+
+function cls_set() {
+    document.getElementById("temp_min").value = "";
+    document.getElementById("temp_max").value = "";
+    document.getElementById("humi_min").value = "";
+    document.getElementById("humi_max").value = "";
+
 }

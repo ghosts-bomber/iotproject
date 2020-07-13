@@ -18,7 +18,6 @@ typedef struct
 
 
 extern void ipc_init();
-extern void cgi_get_data(MSG *msg);
 
 
 #endif
