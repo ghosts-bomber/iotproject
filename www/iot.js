@@ -39,7 +39,7 @@ function update_data() {
     //创建一个xmlHttpRequest对象
     var xmlHttp = null;
     xmlHttp = getXMLHttpRequest();
-    var data = "get_data";
+    var data = "getdata";
 
     xmlHttp.onreadystatechange = function () {
         //alert(xmlHttp.readyState+"   "+xmlHttp.status)
@@ -47,6 +47,7 @@ function update_data() {
             //获取服务器的结果
             var ret = xmlHttp.responseText;
             //将ret赋值给label
+         
             if (ret != "NULL\n") {
                 var arr = ret.split(",");
                 document.getElementById("num").innerHTML = i++;
@@ -127,4 +128,29 @@ function cls_set() {
     document.getElementById("humi_min").value = "";
     document.getElementById("humi_max").value = "";
 
+}
+function get_data()
+{
+     //POST数据是密文传输
+     var url = "/cgi-bin/iot.cgi";
+     //创建一个xmlHttpRequest对象
+     var xmlHttp = null;
+     xmlHttp = getXMLHttpRequest();
+     var data = "get_data";
+ 
+     xmlHttp.onreadystatechange = function () {
+         //alert(xmlHttp.readyState+"   "+xmlHttp.status)
+         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+             //获取服务器的结果
+             var ret = xmlHttp.responseText;
+             //将ret赋值给label
+            alert(ret);
+         }
+     }
+ 
+     //open POST
+     xmlHttp.open("POST", url, true);
+ 
+     //POST send 由于url没有数据 所以只能用send将data发送出去
+     xmlHttp.send(data);//将data发送给服务器
 }

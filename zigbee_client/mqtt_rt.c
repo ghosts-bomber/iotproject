@@ -34,8 +34,9 @@ int main()
         fprintf(stderr, "serial_open(): %s\n", serial_errmsg(serial));
         exit(1);
     }
+/*
     //启动接收程序
-    /*
+
     sleep(2);
     if(serial_write(serial, "get_data",strlen("get_data")) < 0)
     {
@@ -156,12 +157,13 @@ int main()
                     while (!(cmd[ret++] == ' '))
                     {
                     }
-                    if (serial_write(serial, cmd + ret, sizeof(cmd) - ret) < 0)
+                    if (serial_write(serial, cmd + ret, strlen(cmd+ret)) < 0)
                     {
                         fprintf(stderr, "serial_write(): %s\n", serial_errmsg(serial));
                         exit(1);
                     }
-                    printf("%d::%s", ret, cmd + ret);
+                    printf("send to serial");
+                    printf("%s", cmd + ret);
                 }
             }
         }

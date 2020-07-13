@@ -20,7 +20,7 @@ int main()
 
     //初始化消息队列
     ipc_init();
-    if (strncmp(data, "get_da", 5) == 0)
+    if (strncmp(data, "getdata", 5) == 0)
     {
         MSG msg;
         memset(&msg, 0, sizeof(MSG));
@@ -30,7 +30,6 @@ int main()
             printf("NULL\n");
             return -1;
         }
-
         printf("%d,%d\n", msg.temp, msg.humi);
     }
     else if (strncmp(data, "set_data", 8) == 0)
@@ -45,6 +44,18 @@ int main()
             return -1;
         }
         printf("successful\n");
+    }
+    else if(strncmp(data,"get_data",6)==0)
+    {
+        GETCMD cmd;
+        cmd.mtype = 20;
+        strcpy(cmd.cmd, data);
+        if (msgsnd(msg_id, &cmd, sizeof(GETCMD) - sizeof(long), 0) < 0)
+        {
+            printf("send msg error \n");
+            return -1;
+        }
+        printf("start zigbee");
     }
     return 0;
 }

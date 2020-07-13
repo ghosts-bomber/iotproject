@@ -52,17 +52,17 @@
                     style="width:50px;">°C
                 <br>
                 <input type="text" id="humi_min" style="width:50px;"> &nbsp;&nbsp;<input type="text" id="humi_max"
-                    style="width:50px;">%
-
-
+                    style="width:50px;">%&nbsp;
+                <br>
+                <input type="button" onclick="get_data();" name="" id="" value="get_data">
             </div>
 
             <div class="small">
-                <b>采集节点 &nbsp; &nbsp;当前值</b>
+                <b>采集节点 &nbsp; &nbsp;当前值</b><label for="" id="num">0</label>
                 <br>
-                温度:<label for="" id="temp">0</label>°C
+                温度:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for="" id="temp">0</label>°C
                 <br>
-                湿度: <label for="" id="humi">0</label>%
+                湿度:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for="" id="humi">0</label>%
                 <br>
                 <input type="button" onclick="timer_fun(1);" name="" id="" value="显示数据">
                 <input type="button" onclick="timer_fun(0);" name="" id="" value="停止显示">
@@ -85,7 +85,8 @@
             </div>
         </div>
         <div>
-            <input type="button" value="设置" onclick="set_sys();"> &nbsp;&nbsp;<input type="button" value="复位"onclick="cls_set()">
+            <input type="button" value="设置" onclick="set_sys();"> &nbsp;&nbsp;<input type="button" value="复位"
+                onclick="cls_set()">
         </div>
     </div>
 
