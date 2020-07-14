@@ -49,12 +49,11 @@ function update_data() {
             //将ret赋值给label
          
             if (ret != "NULL\n") {
-                var arr = ret.split(",");
+                var arr = ret.split(",");//29,78
                 document.getElementById("num").innerHTML = i++;
                 document.getElementById("temp").innerHTML = arr[0];
                 document.getElementById("humi").innerHTML = arr[1];
             }
-
         }
     }
 
@@ -85,17 +84,17 @@ function set_sys() {
         var xmlHttp = null;
         xmlHttp = getXMLHttpRequest();
         var data = "set_data";
-        data += ',' + temp_min + ',' + temp_max + ',' + humi_max + ',' + humi_min;
-        if (temp_sw == "开启") {
+        data += ',' + temp_min + ',' + temp_max + ',' + humi_min + ',' + humi_max;
+        if (temp_sw == "手动") {
             data += ",manual";
         }
-        else if (temp_sw == "关闭") {
+        else if (temp_sw == "自动") {
             data += ",auto";
         }
-        if (humi_sw == "开启") {
+        if (humi_sw == "手动") {
             data += ",manual";
         }
-        else if (humi_sw == "关闭") {
+        else if (humi_sw == "自动") {
             data += ",auto";
         }
         xmlHttp.onreadystatechange = function () {

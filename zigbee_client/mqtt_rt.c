@@ -162,7 +162,7 @@ int main()
                         fprintf(stderr, "serial_write(): %s\n", serial_errmsg(serial));
                         exit(1);
                     }
-                    printf("send to serial");
+                    printf("send to serial:");
                     printf("%s", cmd + ret);
                 }
             }

@@ -11,40 +11,42 @@ sqlite3 *db = NULL;
 int msg_id;
 
 void analy_data(char *buf, int len)
-{
-
-    Get_Data data;
-    char discard[20] = "";
+{   
     //解析数据
-    if (len > 30 && strncmp((buf + 6), "recv", 4) == 0)
+    if (len > 30 && strncmp((buf + 6), "recv", 4) == 0 && strncmp((buf + 11), "periodic", 5) == 0)
     {
+        Get_Data data;
+        char discard[20] = "";
         sscanf(buf, "%[^:]:%[^:]:%[^,],%d,%d,%[^,],%s", data.id, data.head, discard, &data.temp, &data.humi, data.curr_t, data.curr_h);
         printf("jieguo:%s--%s--%d--%d--%s--%s\n", data.id, data.head, data.temp, data.humi, data.curr_t, data.curr_h);
-    }
+        //线程存入数据库
+        pthread_t tid;
+        pthread_create(&tid, NULL, db_write, (void *)&data);
+        pthread_detach(tid);
 
-    //线程存入数据库
-    pthread_t tid;
-    pthread_create(&tid, NULL, db_write, (void *)&data);
-    pthread_detach(tid);
-
-    //写入消息队列
-    MSG msg;
-    memset(&msg, 0, sizeof(MSG));
-    msg.mtype = 10;
-    msg.temp = data.temp;
-    msg.humi = data.humi;
-    strcpy(msg.id, data.id);
-    strcpy(msg.head, data.head);
-    strcpy(msg.curr_h, data.curr_h);
-    strcpy(msg.curr_t, data.curr_t);
-    if (msgsnd(msg_id, &msg, sizeof(MSG) - sizeof(long), 0) < 0)
-    {
-        printf("send msg error \n");
-        return;
+        //写入消息队列
+        MSG msg;
+        memset(&msg, 0, sizeof(MSG));
+        msg.mtype = 10;
+        msg.temp = data.temp;
+        msg.humi = data.humi;
+        strcpy(msg.id, data.id);
+        strcpy(msg.head, data.head);
+        strcpy(msg.curr_h, data.curr_h);
+        strcpy(msg.curr_t, data.curr_t);
+        if (msgsnd(msg_id, &msg, sizeof(MSG) - sizeof(long), 0) < 0)
+        {
+            printf("send msg error \n");
+            return;
+        }
+        else
+        {
+            printf("add ipc succeeful\n");
+        }
     }
     else
     {
-        printf("add ipc succeeful\n");
+        printf("%s", buf);
     }
 }
 void read_ipc(char *buf)

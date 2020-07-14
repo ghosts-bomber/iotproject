@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>智慧农业</title>
+    <script type="text/javascript" src="iot.js">
+    </script>
+
+    <style>
+        div,
+        input {
+            padding: 0;
+            margin: 0
+        }
+
+        input {
+            outline: none;
+            display: block
+        }
+
+        .container {
+            width: 650px;
+            height: 400px;
+            border-radius: 1em;
+            border: 1px solid #003333;
+            margin: 100px auto;
+        }
+
+        .title {
+            text-align: center
+        }
+
+        .data {
+            width: 60px;
+            height: 20px;
+            font-size: 14px;
+            background: pink;
+            border: 1px solid #ccc;
+            border-radius: .3em;
+            margin: 5px 10px;
+            float: left
+        }
+
+        .active {
+            width: 35px;
+            height: 20px;
+            background: red;
+            font-size: 12px;
+            color: #fff;
+            border-radius: .3em;
+            text-align: center;
+            margin: 5px 10px;
+            float: right
+        }
+
+        .main {
+            height: 300px;
+            display: flex;
+            justify-content: space-around
+        }
+
+        .main div {
+            width: 180px;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 1.5em
+        }
+
+        .wrap input {
+            width: 45px;
+            height: 15px;
+            display: inline;
+            margin: 4px 8px;
+            text-align: center
+        }
+
+        h6 a {
+            font-size: 14px;
+            margin: 0 8px
+        }
+
+        .middle p a {
+            font-size: 14px;
+            margin: 10px;
+        }
+
+        .middle p span {
+            font-size: 14px;
+            margin: 20px;
+            display: inline;
+        }
+
+        .main div.right {
+            width: 210px
+        }
+
+        .right p {
+            display: flex;
+            justify-content: space-around
+        }
+
+        .right p a {
+            font-size: 14px
+        }
+
+        .right p span {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            font-size: 12px;
+            color: blue;
+            border: 1px solid #000;
+            border-radius: .5em;
+            text-align: center
+        }
+    </style>
+
+</head>
+
+<body background="ha.jpg" style=" background-repeat:no-repeat ;
+
+background-size:100% 100%; 
+
+background-attachment: fixed;">
+    <h1 style="text-align:center;">智能蔬菜大棚系统
+    </h1>
+    <div class="container">
+        <p class="title">
+            <input type="button" class="data" value="历史数据" onclick="my_button(1);" />
+           <!-- <span class="store">5号</span> --> 
+           <label id='device_id' style="font-size: 28px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1号棚</label>
+            
+            <input type="button" class="active" value="清除" onclick="cls_set();" />
+            <input type="button" class="active" value="生效" onclick="set_sys();" />
+            <input type="button" class="active" onclick="timer_fun(0);" value="停止">
+            <input type="button" class="active" onclick="timer_fun(1);"  value="显示">
+            <input type="button"class="active"  value="data" onclick="get_data();">
+           
+            <!--
+			<input type="button"  class="active" value="XX" onclick="on_button_config()"/>
+			-->
+        </p>
+        <div class="main">
+            <div class="left">
+                <h6>
+                    <a>最小值</a>
+                    <a>最大值</a>
+                </h6>
+                <p class="wrap">
+                    <input id="temp_min" value="0" />
+                    <input id="temp_max" value="0" />℃
+                </p>
+                <br>
+                <p class="wrap">
+                    <input value="0" id="humi_min" />
+                    <input value="0" id="humi_max" />%
+                </p>
+                <br>
+
+
+            </div>
+            <div class="middle">
+                <h6>
+                    <a>采集节点</a>
+                    <a>当前值</a>
+                </h6>
+                <p>
+                    <a>温度:</a>
+                    <th><label for="" id="temp">0</label></th>
+                    <label>℃</label>
+                    <!-- <span>28.2℃</span> -->
+                </p>
+                <br>
+                <p>
+                    <a>湿度:</a>
+                    <th><label for="" id="humi">0</label></th>
+                    <label>%</label>
+                    <!-- <span>60%</span> -->
+                </p>
+                <p>
+                    <a>监测次数:</a>
+                    <th><label for="" id="num">0</label></th>
+                    <!-- <span>60%</span> -->
+                </p>
+               
+                <br>
+
+            </div>
+            <div class="right">
+                <h6>
+                    <a>控制节点</a>
+                    <a>状态</a>
+                    <a> 手动状态</a>
+
+                </h6>
+                <p>
+                    <a>排风扇：</a>
+                    <!-- <span>关闭</span> -->
+                    <!-- <i></i> -->
+                    <!-- <a>手动</a> -->
+                    <th><input type="button" name="temp_adjust_1" id="temp_adjust_1" value="关闭"
+                            onclick="set_temp_ops()"></th>
+                    <th></th>
+                    <!-- <th><label>手动</label></th> -->
+                    <th>
+                        <select id="temp_sw">
+                            <option>手动</option>
+                            <option selected>自动</option>
+                        </select>
+                    </th>
+                </p>
+                <br>
+                <p>
+                    <a>滴&nbsp;&nbsp;&nbsp;&nbsp;灌：</a>
+                    <th><input type="button" name="humi_adjust_1" id="humi_adjust_1" value="关闭"
+                            onclick="set_humi_ops()"></th>
+                    <th></th>
+                    <!-- <th><label>手动</label></th> -->
+                    <th>
+                        <select id="humi_sw">
+                            <option>手动</option>
+                            <option selected>自动</option>
+                        </select>
+                    </th>
+                </p>
+                <br>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

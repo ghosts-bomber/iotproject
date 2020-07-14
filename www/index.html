@@ -1,95 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script type="text/javascript" src="iot.js"></script>
-    <style>
-        #large {
-            margin: 0 auto;
-            width: 800px;
-            height: 520px;
-            border: 2px solid darkslategray;
-            border-radius: 30px;
-            text-align: center;
-        }
-
-        div.small {
-            margin: 0 auto;
-            width: 100px;
-            height: 100px;
-            border: 2px solid darkslategray;
-            border-radius: 30px;
-            text-align: center;
-            line-height: 100px;
-        }
-
-        div.small {
-            margin: 0 auto;
-            width: 200px;
-            height: 150px;
-            border: 2px solid darkslategray;
-            border-radius: 30px;
-            line-height: 35px;
-        }
-    </style>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" src="index.js"></script>
 </head>
+<body  background="ha.jpg" style=" background-repeat:no-repeat ;
+background-size:100% 100%; background-attachment: fixed;">
+    <div id="login">
+        <h1>Login</h1>
+        <form method="post">
+            <input type="text" required="required" placeholder="用户名" name="user" id="user">
+            <input type="password" required="required"placeholder="密码" name="passwd" id="passwd">
 
-<body>
-    <div id="large">
+            <input type="button" class="but" type="submit" value="登陆" onclick="login();">
 
-        <div id="small">
-            <label for=""><b>数据显示</b></label>
-        </div>
-        <div>
-            <div class="small">
-                <b>最小值 &nbsp; &nbsp;最大值</b>
-                <br>
-
-                <input type="text" id="temp_min" style="width:50px;"> &nbsp;&nbsp;<input type="text" id="temp_max"
-                    style="width:50px;">°C
-                <br>
-                <input type="text" id="humi_min" style="width:50px;"> &nbsp;&nbsp;<input type="text" id="humi_max"
-                    style="width:50px;">%&nbsp;
-                <br>
-                <input type="button" onclick="get_data();" name="" id="" value="get_data">
-            </div>
-
-            <div class="small">
-                <b>采集节点 &nbsp; &nbsp;当前值</b><label for="" id="num">0</label>
-                <br>
-                温度:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for="" id="temp">0</label>°C
-                <br>
-                湿度:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for="" id="humi">0</label>%
-                <br>
-                <input type="button" onclick="timer_fun(1);" name="" id="" value="显示数据">
-                <input type="button" onclick="timer_fun(0);" name="" id="" value="停止显示">
-            </div>
-
-            <div class="small">
-                <b>控制节点&nbsp; &nbsp;状态&nbsp; &nbsp;手动状态</b>
-                <br>
-                温度: <input type="button" name="" id="" value="关闭">
-                <select id="temp_sw">
-                    <option>开启</option>
-                    <option selected>关闭</option>
-                </select>
-                <br>
-                湿度: <input type="button" name="" id="" value="关闭">
-                <select id="humi_sw">
-                    <option>开启</option>
-                    <option selected>关闭</option>
-                </select>
-            </div>
-        </div>
-        <div>
-            <input type="button" value="设置" onclick="set_sys();"> &nbsp;&nbsp;<input type="button" value="复位"
-                onclick="cls_set()">
-        </div>
+        </form>
     </div>
-
 </body>
-
 </html>
